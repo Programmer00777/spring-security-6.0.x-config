@@ -8,16 +8,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig {
+
+    /**
+     * Explicit configuration of the SecurityFilterChain bean
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,11 +34,18 @@ public class SpringSecurityConfig {
     public UserDetailsService userDetailsService() {
         PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         UserDetails user = User
-                            .withUsername("spring_user")
-                            .password(encoder.encode("password123"))
-                            .roles("USER")
+                            .withUsername("admin")
+                            .password(encoder.encode("admin123"))
+                            .roles("USER", "ADMIN")
                             .build();
 
         return new InMemoryUserDetailsManager(user);
     }
 }
+
+/*
+    Although we can define our own set of password encoders, it's recommended to stick with the default encoders
+    provided in PasswordEncoderFactories.
+    Since Spring Security version 5.7.0-M2, Spring deprecates the use of WebSecurityConfigureAdapter and suggests
+    creating configurations without it.
+ */
