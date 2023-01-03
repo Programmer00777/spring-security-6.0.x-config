@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/auth")
-public class AppRestController {
+public class GreetingRestController {
 
     @GetMapping(path = "/greeting")
     public String greeting() {
